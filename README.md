@@ -22,23 +22,3 @@
 
 -호스팅\
 ![](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
-
-# 👉디렉터리 구조
-```
-/test
-/studyroom-dev
-	└──/static
-		└──/css
-			├── /common.css
-			├── /style.css
-		└──/img
-			├── /favicon.png
-		└──/js
-			├── /common.js
-			├── /main.js
-		/templates
-			├── /index.html
-			├── /login.html
-			└── /signup.html
-		├── /app.py
-```
