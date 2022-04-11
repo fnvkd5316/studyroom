@@ -9,13 +9,7 @@
   // 지도를 생성한다
   const map = new kakao.maps.Map(mapContainer, mapOption);
 
-  // 마커 클러스터러를 생성합니다
-  new kakao.maps.MarkerClusterer({
-    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-  });
-
-  // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+  // 지도에 마커와 인포윈도우(말풍선)를 표시하는 함수입니다
   function displayMarker(locPosition, message) {
     // 마커를 생성합니다
     const marker = new kakao.maps.Marker({
@@ -26,13 +20,13 @@
     const iwContent = message, // 인포윈도우에 표시할 내용
       iwRemoveable = false;
 
-    // 인포윈도우를 생성합니다
+    // 인포윈도우(말풍선)를 생성합니다
     const infowindow = new kakao.maps.InfoWindow({
       content: iwContent,
       removable: iwRemoveable,
     });
 
-    // 인포윈도우를 마커위에 표시합니다
+    // 인포윈도우(말풍선)를 마커위에 표시합니다
     infowindow.open(map, marker);
 
     // 지도 중심좌표를 접속위치로 변경합니다
