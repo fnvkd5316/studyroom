@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="./common.css">
 	<title>Document</title>
 </head>
-<body>
+<body class="root">
 	<h2 class="display-6 weight_400">Input box</h2>
 	<div class="form-group row mb-3">
 		<label for="inputName" class="col-sm-2 col-form-label">이름</label>
@@ -43,5 +43,48 @@
 	<div class="btn btn_white btn_border_black">로그아웃</div>
 	<div class="btn btn_black weight_800">SIGN UP</div>
 	<div class="btn btn_white btn_radius btn_border_show">지도로 보기</div>
+
+	<br/>
+	<h2 class="display-6 weight_400">Card</h2>
+	<div class="card_wrap">
+		<div class="card_inner">
+			<div class="card">
+				<img src="./thumbnail.png" class="card-img-top" alt="thumbnail">
+				<div class="card-body">
+					<h5 class="card-title weight_600">커피바인더리</h5>
+					<p class="card-text">서울 강남구 / 카페</p>
+				</div>
+			</div>
+			<div class="card">
+				<img src="./thumbnail.png" class="card-img-top" alt="thumbnail">
+				<div class="card-body">
+					<h5 class="card-title weight_600">커피바인더리</h5>
+					<p class="card-text">서울 강남구 / 카페</p>
+				</div>
+			</div>
+			<div class="card">
+				<img src="./thumbnail.png" class="card-img-top" alt="thumbnail">
+				<div class="card-body">
+					<h5 class="card-title weight_600">커피바인더리</h5>
+					<p class="card-text">서울 강남구 / 카페</p>
+				</div>
+			</div>
+			<div class="card">
+				<img src="./thumbnail.png" class="card-img-top" alt="thumbnail">
+				<div class="card-body">
+					<h5 class="card-title weight_600">커피바인더리</h5>
+					<p class="card-text">서울 강남구 / 카페</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer_menu_inner">
+		<div class="menu home"><a href="/" class="logo"><i class="ic-home"></i></a></div>
+		<div class="menu share"><a href="#none"><i class="ic-search"></i></a></div>
+		<div class="menu add"><a href="#none"><i class="ic-add"></i></a></div>
+		<div class="menu themMode"><a href="#none"><i class="ic-bookmark-unactive"></i></a></div>
+		<div class="menu moreMenu"><a href="#none"><i class="ic-user"></i></a></div>
+	</div>
 </body>
 </html>
