@@ -1,10 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" data-dark="false">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+	<link rel="stylesheet" href="../static/css/common.css">
+	<link rel="stylesheet" href="../static/css/main.css">
+	<title>카페 조회 서비스</title>
 </head>
-<body>
-<!--    여기는 홈페이지 메인입니다.-->
+<body class="main">
+	<div class="wapper">
+		<div class="w-100 btn bg_white_F4 btn_radius weight_600 mt-4 mb-3">내 주변 검색</div>
+	</div>
+	<div class="card_wrap">
+		<ul class="card_inner">
+		</ul>
+	</div>
+
+	<div class="btn btn_white btn_radius btn_border_show btn_cus btn-js"><i class="ic-map"></i> <span class="mapShow">지도보기</span></div>
+	<div class="wapper">
+		<div class="footer_menu_inner">
+			<div class="menu home"><a href="/" class="logo"><i class="ic-home"></i></a></div>
+			<div class="menu share"><a href="#none"><i class="ic-search"></i></a></div>
+			<div class="menu add"><a href="#none"><i class="ic-add"></i></a></div>
+			<div class="menu themMode"><a href="#none"><i class="ic-bookmark-unactive"></i></a></div>
+			<div class="menu moreMenu"><a href="#none"><i class="ic-user"></i></a></div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function(){
+			handle();
+			$('.btn-js').on('click', showMap);
+			$('.card_inner').on('click', '.bookmark', bookmark);
+		});
+
+		function tempHtml(datas) {
+			return datas.map((item) => { 
+				const {title, imgUrl, region} = item;
+				return (`<li class="card">
+									<a href="#0">
+										<div class="card-thumbnail">
+											<img src="${imgUrl}" alt="thumbnail">
+											<span class="bookmark"><i class="ic-bookmark-unactive"></i></span>
+										</div>
+										<div class="card-body">
+											<h5 class="card-title weight_600">${title}</h5>
+											<p class="card-text">${region} / 카페</p>
+										</div>
+									</a>
+								</li>`) 
+			}).join('');
+		};
+
+		function showMap(e) {
+			const self = $(e.currentTarget);
+			const i = self.children('i');
+			if(i.hasClass('ic-map')){
+				self.addClass('on')
+				i.removeClass();
+				i.addClass('ic-menu');
+				$('.mapShow').text('목록보기');
+			} else {
+				self.removeClass('on')
+				i.addClass('ic-map');
+				$('.mapShow').text('지도보기');
+			}
+		};
+
+		function bookmark(e) {
+			const self = $(e.currentTarget);
+			const i = self.find('i');
+			if(i.hasClass('ic-bookmark-unactive')){
+				i.removeClass();
+				i.addClass('ic-bookmark-active');
+			} else {
+				i.addClass('ic-bookmark-unactive');
+			}
+		};
+
+		function geolocationT() {
+			// geolocation true 기능 함수 
+			// GeoLocation을 이용해서 접속 위치를 얻어옵니다 
+			navigator.geolocation.getCurrentPosition((position) => { 
+				const {latitude, longitude} = position.coords 
+				const locPosition = new kakao.maps.LatLng(latitude, longitude),
+				message = '<div style="padding:5px;">여기에 계신가요?!</div>';
+				displayMarker(locPosition, message); 
+			}); 
+		};
+
+		function geolocationF() { 
+			// geolocation false 인경우 기능 함수 
+			const locPosition = new kakao.maps.LatLng(33.450701, 126.570667), 
+			message = 'geolocation을 사용할수 없어요..';
+			displayMarker(locPosition, message); 
+		};
+
+		function handle() {
+			$.ajax({
+					type: "GET",
+					url: "../mock.json",
+					data: {},
+					success: function (res) {
+						$('.card_inner').html(tempHtml(res))
+					}
+			});
+			if (navigator.geolocation) {
+				// geolocationT()
+			} else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우(말풍선) 내용을 설정합니다 
+				// geolocationF(); 
+			}
+		};
+	</script>
 </body>
-</html>
+</html>	
