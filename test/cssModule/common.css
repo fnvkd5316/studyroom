@@ -119,6 +119,7 @@ i{font-family:'font'!important;speak:never;font-style:normal;font-weight:normal;
 	--s-color_C4: #C4C4C4;
   --s-color_3: #333333;
 	--g-color_0: #000000;
+  --g-point_2: #F04452;
 }
 
 .font_white_F {color: var(--g-color)}
@@ -150,11 +151,14 @@ i{font-family:'font'!important;speak:never;font-style:normal;font-weight:normal;
 .btn_black:hover {color: var(--g-color);}
 .btn_white {color:var(--g-color_0);background-color:var(--g-color);}
 .btn_black {color:var(--g-color);background-color:var(--g-color_0);}
+.btn_point {color:var(--g-color);background-color:var(--g-point_2);}
 .btn_block {display: block; height: 52px; line-height: 40px;}
+/* // Button */
 
+/* menu */
 .footer_menu_inner{width:100%;height:60px;line-height:60px;display:flex;position:fixed;left:0;bottom:0;z-index:21;justify-content:space-around;align-items:center;border-top:1px solid var(--s-color_D);background-color:var(--g-color);}
 .footer_menu_inner .menu {font-size: 26px;}
-/* // Button */
+/* // menu */
 
 /* InputBox */
 .form_custom_main::placeholder {color: transparent !important;}
