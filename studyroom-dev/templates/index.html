@@ -41,7 +41,6 @@
 	<script>
 		$(document).ready(function(){
 			handle();
-			$('.btn-js').on('click', showMap);
 			$('.card_inner').on('click', '.bookmark', bookmark);
 		});
 
@@ -61,25 +60,6 @@
 									</a>
 								</li>`) 
 			}).join('');
-		};
-
-		function showMap(e) {
-			const self = $(e.currentTarget);
-			const i = self.children('i');
-			if(i.hasClass('ic-map')){
-				self.addClass('on')
-				i.removeClass();
-				i.addClass('ic-menu');
-				$('.mapShow').text('목록보기');
-				$('.card_wrap').hide()
-				$('.map_wrap').show()
-			} else {
-				self.removeClass('on')
-				i.addClass('ic-map');
-				$('.mapShow').text('지도보기');
-				$('.card_wrap').show()
-				$('.map_wrap').hide()
-			}
 		};
 
 		function bookmark(e) {
