@@ -57,9 +57,36 @@ template{display:none;}
 /* // css reset */
 
 /* 아이콘 폰트 */
-@font-face{font-family:'font';src:url('../fonts/font.eot?15n9ha');src:url('../fonts/font.eot?15n9ha#iefix') format('embedded-opentype'),url('../fonts/font.ttf?15n9ha') format('truetype'),url('../fonts/font.woff?15n9ha') format('woff'),url('../fonts/font.svg?15n9ha#font') format('svg');font-weight:normal;font-style:normal;font-display:swap;}
-i{font-family:'font'!important;speak:never;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+@font-face {
+  font-family: 'font';
+  src:  url('../fonts/font.eot?o3rnj4');
+  src:  url('../fonts/font.eot?o3rnj4#iefix') format('embedded-opentype'),
+    url('../fonts/font.ttf?o3rnj4') format('truetype'),
+    url('../fonts/font.woff?o3rnj4') format('woff'),
+    url('../fonts/font.svg?o3rnj4#font') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
 
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'font' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ic-my-location:before {
+  content: "\e910";
+}
 .ic-add:before {
   content: "\e900";
 }
