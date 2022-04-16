@@ -2,9 +2,13 @@ from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
+
+@app.route("/cafeform")
+def cafeForm():
+    return render_template("cafeForm.html")
 
 @app.route("/main", methods=["GET"])
 def main_get():
@@ -12,7 +16,7 @@ def main_get():
             {
                 "id": 1,
                 "title": "커피바인더리",
-                "imgUrl": "../static/images/thumbnail.png",
+                "imgUrl": "../static/images/download.jpg",
                 "region": "서울 강남구",
                 "createdAt": 1591714800000,
                 "updatedAt": 1591714800000
@@ -20,7 +24,7 @@ def main_get():
             {
                 "id": 2,
                 "title": "커피바인더리",
-                "imgUrl": "../static/images/thumbnail.png",
+                "imgUrl": "../static/images/download-1.jpg",
                 "region": "서울 강남구",
                 "createdAt": 1592406000000,
                 "updatedAt": 1592406000000
@@ -28,7 +32,7 @@ def main_get():
             {
                 "id": 3,
                 "title": "커피바인더리",
-                "imgUrl": "../static/images/thumbnail.png",
+                "imgUrl": "../static/images/download-2.jpg",
                 "region": "서울 강남구",
                 "createdAt": 1591196400000,
                 "updatedAt": 1591196400000
@@ -36,7 +40,7 @@ def main_get():
             {
                 "id": 4,
                 "title": "커피바인더리",
-                "imgUrl": "../static/images/thumbnail.png",
+                "imgUrl": "../static/images/download-3.jpg",
                 "region": "서울 강남구",
                 "createdAt": 1594738800000,
                 "updatedAt": 1594738800000
@@ -44,7 +48,7 @@ def main_get():
             {
                 "id": 5,
                 "title": "커피바인더리",
-                "imgUrl": "../static/images/thumbnail.png",
+                "imgUrl": "../static/images/download-4.jpg",
                 "region": "서울 강남구",
                 "createdAt": 1592924400000,
                 "updatedAt": 1592924400000

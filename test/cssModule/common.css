@@ -161,11 +161,14 @@ i{font-family:'font'!important;speak:never;font-style:normal;font-weight:normal;
 /* // menu */
 
 /* InputBox */
-.form_custom_main::placeholder {color: transparent !important;}
-.form_custom_main:focus {border-color: var(--g-color_0); box-shadow:none;}
-.form_custom_main+label {color: var(--s-color_BF);}
-.form_custom_main{border: 2px solid var(--g-color_0); border-radius: 5px;}
-.form_custom_sub{background-color: var(--g-color8); border: 1px solid var(--s-color_D); border-radius: 5px;}
+.form_custom_v1::placeholder {color: transparent !important;}
+.form_custom_v1:focus {border-color: var(--g-color_0); box-shadow:none;}
+.form_custom_v1+label {color: var(--s-color_BF);}
+.form_custom_v1{border: 2px solid var(--g-color_0); border-radius: 5px;}
+.form_custom_v1_sub{background-color: var(--g-color8); border: 1px solid var(--s-color_D); border-radius: 5px;}
+
+.form_custom_v2::placeholder {color: transparent !important;}
+.form_custom_v2+label{color: var(--s-color_C4)}
 /* // InputBox */
 
 /* card */
@@ -191,3 +194,41 @@ i{font-family:'font'!important;speak:never;font-style:normal;font-weight:normal;
 	.card {width: 300px;}
 }
 /* card */
+
+ /* 파일 업로드 필드 */
+.filebox label {
+  width: 80px;
+  height: 80px;
+  line-height: 50px;
+  text-align: center;
+  display: inline-block;
+  padding: .5em .75em;
+  color: #C4C4C4;
+  font-size: inherit;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: .4em;
+  border: 1px dashed #C4C4C4;
+  position: relative;
+}
+
+.filebox input[type="file"] {  /* 파일 필드 숨기기 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+}
+
+.filebox label::before {
+  content: attr(data-number);
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+/* 파일 업로드 필드 */

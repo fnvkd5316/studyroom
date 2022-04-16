@@ -184,6 +184,7 @@ i {
 .btn_black:hover {color: var(--g-color);}
 .btn_white {color:var(--g-color_0);background-color:var(--g-color);}
 .btn_black {color:var(--g-color);background-color:var(--g-color_0);}
+.btn_gray {color:var(--s-color_C4);background-color:var(--s-color_F4);}
 .btn_point {color:var(--g-color);background-color:var(--g-point_2);}
 .btn_block {display: block; height: 52px; line-height: 40px;}
 /* // Button */
@@ -194,11 +195,17 @@ i {
 /* // menu */
 
 /* InputBox */
-.form_custom_main::placeholder {color: transparent !important;}
-.form_custom_main:focus {border-color: var(--g-color_0); box-shadow:none;}
-.form_custom_main+label {color: var(--s-color_BF);}
-.form_custom_main{border: 2px solid var(--g-color_0); border-radius: 5px;}
-.form_custom_sub{background-color: var(--g-color8); border: 1px solid var(--s-color_D); border-radius: 5px;}
+.form_custom_v1::placeholder {color: transparent !important;}
+.form_custom_v1:focus {border-color: var(--g-color_0); box-shadow:none;}
+.form_custom_v1+label {color: var(--s-color_BF);font-size: 14px;}
+.form_custom_v1{border: 2px solid var(--g-color_0); border-radius: 5px;}
+.form_custom_v1_sub{background-color: var(--g-color8); border: 1px solid var(--s-color_D); border-radius: 5px;}
+
+.form_custom_v2::placeholder {color: transparent !important;}
+.form_custom_v2+label{color: var(--s-color_C4); font-size: 14px;padding: 0.6rem .75rem;}
+
+.form_custom_v3 {height: calc(2.3rem + 2px); border-radius: 5px; border: 1px solid var(--s-color_D);}
+.form_custom_v3::placeholder{color: var(--s-color_BF) !important;}
 /* // InputBox */
 
 /* card */
