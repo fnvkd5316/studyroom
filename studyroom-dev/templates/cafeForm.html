@@ -29,35 +29,43 @@
 				<label for="file1" data-number="0/5"><i class="ic-add"></i></label> 
 				<input type="file" id="file1" name="files" multiple> 
 			</div>
-			<div class="fileboxText">사진의 권장 사이즈 <div>1080 X 1350</div> 용랑은 50MB 이하만 등록 가능합니다.</div>
+			<div class="fileboxText">사진은 필수로 넣어야 하고, 권장하는 사이즈는 <div>1080 X 1350</div> 용랑은 50MB 이하만 등록 가능합니다.</div>
 			<div id="fileList" class="fileList"></div>
 		</div>
 
 		<!-- 카페 info -->
-		<div class="form-floating mb-3">
-			<input type="text" class="form-control form_custom_v2" id="floatingInput" placeholder="카페명을 입력해 주세요.(최대 30자)" maxlength="30">
-			<label for="floatingInput">카페명을 입력해 주세요.(최대 30자)</label>
-		</div>
-		<div class="form-floating mb-3">
-			<textarea id="textarea" class="form-control form_custom_v2" placeholder="카페 설명을 입력해 주세요.(최대 1,000자)" rows="6" maxlength="1000"></textarea>
-			<label for="textarea">카페 설명을 입력해 주세요.(최대 1,000자)</label>
+		<div>
+			<h2 class="cafeName display-6 dot">카페 이름</h2>
+			<div class="form-floating mb-3">
+				<input type="text" class="form-control form_custom_v2" id="floatingInput" placeholder="카페명을 입력해 주세요.(최대 30자)" maxlength="30">
+				<label for="floatingInput">카페명을 입력해 주세요.(최대 30자)</label>
+			</div>
 		</div>
 
-		<div class="row g-1 add_info_inner">
-			<h2 class="add_info">주소정보</h2>
-			<div class="col-8 mb-3 col_cus">
-				<input type="text" class="form-control form_custom_v3" id="postcode" placeholder="우편번호">
+		<div>
+			<h2 class="cafeDesc display-6 dot">카페 설명</h2>
+			<div class="form-floating mb-3">
+				<textarea id="textarea" class="form-control form_custom_v2" placeholder="카페 설명을 입력해 주세요.(최대 1,000자)" rows="6" maxlength="1000"></textarea>
+				<label for="textarea">카페 설명을 입력해 주세요.(최대 1,000자)</label>
 			</div>
-			<div class="col-auto col_cus">
-				<input type="button" class="btn btn_gray" onclick="post()" value="우편번호 검색" />
-			</div>
-			<div class="col-100 mb-3 col_cus">
-				<input type="text" id="address" class="form-control form_custom_v3" placeholder="주소" />
-			</div>
-			<div class="col-100 mb-3 col_cus">
-				<input type="text" id="detailAddr" class="form-control form_custom_v3" placeholder="상세주소">
-			</div>
+		</div>
 
+		<div>
+			<h2 class="add_info display-6 dot">주소정보</h2>
+			<div class="row g-1 add_info_inner">
+				<div class="col-8 mb-3 col_cus">
+					<input type="text" class="form-control form_custom_v3" id="postcode" placeholder="우편번호">
+				</div>
+				<div class="col-auto col_cus">
+					<input type="button" class="btn btn_gray" onclick="post()" value="우편번호 검색" />
+				</div>
+				<div class="col-100 mb-3 col_cus">
+					<input type="text" id="address" class="form-control form_custom_v3" placeholder="주소" />
+				</div>
+				<div class="col-100 mb-3 col_cus">
+					<input type="text" id="detailAddr" class="form-control form_custom_v3" placeholder="상세주소">
+				</div>
+			</div>
 			<button type="button" class="btn btn_black btn_block weight_800" id="submit" disabled>등록하기</button>
 		</div>
 	</div>
@@ -91,10 +99,9 @@
 		}
 		/* // 유효성 검사*/
 
-		/*  파일 추가 */
+		/* 파일 추가 */
 		function addFiles(e) {
 			const files = Array.from($(this)[0].files);
-			const filesArrLen = fileList.length;
 			files.forEach((item, i) => {
 				const kb = item.size / 1000;
 				const mb = kb / 1000;
@@ -106,13 +113,12 @@
 						fileSize: item.size,
 						url: e.target.result
 					};
-					initData.fileList.push(img);
-					check();
 					const {fileList} = initData;
-					if(fileList.length > 5) {
+					if(fileList.length >= 5) {
 						alert('5개 이상은 추가할수 없습니다.')
 						return;
 					} else {
+						initData.fileList.push(img);
 						$(".fileboxText").hide();
 						$("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
 						$('.filebox label').attr('data-number', `${fileList.length}/5`)
@@ -121,6 +127,7 @@
 						alert('용량 50MB 이상은 추가할수 없습니다.')
 						return;
 					}
+					check();
 				})
 				fileReader.readAsDataURL(item);
 			});
@@ -130,18 +137,16 @@
 		/* 파일 삭제 */
 		function deleteFile(id) {
 			const {fileList} = initData;
-			const handleDeleteArr = fileList.filter(function(data){
-				return data['id'] !== id
-			});
+			const handleDeleteArr = fileList.filter((data) => data['id'] !== id);
 			const template = handleDeleteArr.map(function(el, i) {
 				return `<div class="imgFile"><div onclick="deleteFile(${el.id})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
 			}).join('');
 			$('#fileList').html(template);
 			$('.filebox label').attr('data-number', `${handleDeleteArr.length}/5`);
-			if(fileList.length === 0) {
+			initData.fileList = handleDeleteArr
+			if(fileList.length <= 1) {
 				$(".fileboxText").show();
 			}
-			initData.fileList = handleDeleteArr
 			check()
 		};
 		/* // 파일 삭제 */
