@@ -17,8 +17,8 @@
 .close_inner {position: absolute; top: 30px; right: 20px; font-size: 18px;}
 
 .cafeForm textarea.form-control{height: auto;resize: none;}
-.cafeForm .add_info {font-size: 14px;}
 .cafeForm .add_info_inner {justify-content: space-between;}
 .cafeForm .col-8 {width: 64%;}
 .cafeForm .col_cus {margin-top: 0;}
-.cafeForm .btn_block {border-radius: 6px;}
+.cafeForm .btn_block {width: 100%; border-radius: 6px;}
+.cafeForm .display-6 {font-size: 14px; font-weight: 600;}

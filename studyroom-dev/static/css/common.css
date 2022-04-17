@@ -231,3 +231,5 @@ i {
 	.card {width: 300px;}
 }
 /* card */
+.dot{display: inline-block; position: relative;}
+.dot::after{content:'';display:block;width:5px;height:5px;background-color:var(--g-point_2);border-radius: 50%;position:absolute;top:0;right:-10px;}
