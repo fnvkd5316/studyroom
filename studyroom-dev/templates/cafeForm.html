@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko" data-dark="false">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=bbdd7d112f7e5b20a2e2bdfefc41e9a0&libraries=services"></script>
+	<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+	<link rel="stylesheet" href="../static/css/common.css">
+	<link rel="stylesheet" href="../static/css/cafeForm.css">
+	<title>카페 조회 서비스</title>
+</head>
+<body class="cafeForm">
+	<div class="wapper" id="cafeForm">
+		<div class="w-100 btn btn_radius weight_600 mt-4 mb-3">
+			카페 등록
+			<div class="close_inner">
+				<a href="/"><i class="ic-close"></i></a>
+			</div>
+		</div>
+		
+		<!-- 파일 업로드 -->
+		<div class="filebox_waper mb-3">
+			<div class="filebox">
+				<label for="file1" data-number="0/5"><i class="ic-add"></i></label> 
+				<input type="file" id="file1" name="files" multiple> 
+			</div>
+			<div class="fileboxText">사진은 필수로 넣어야 하고, 권장하는 사이즈는 <div>1080 X 1350</div> 용랑은 50MB 이하만 등록 가능합니다.</div>
+			<div id="fileList" class="fileList"></div>
+		</div>
+
+		<!-- 카페 info -->
+		<div>
+			<h2 class="cafeName display-6 dot">카페 이름</h2>
+			<div class="form-floating mb-3">
+				<input type="text" class="form-control form_custom_v2" id="floatingInput" placeholder="카페명을 입력해 주세요.(최대 30자)" maxlength="30">
+				<label for="floatingInput">카페명을 입력해 주세요.(최대 30자)</label>
+			</div>
+		</div>
+
+		<div>
+			<h2 class="cafeDesc display-6 dot">카페 설명</h2>
+			<div class="form-floating mb-3">
+				<textarea id="textarea" class="form-control form_custom_v2" placeholder="카페 설명을 입력해 주세요.(최대 1,000자)" rows="6" maxlength="1000"></textarea>
+				<label for="textarea">카페 설명을 입력해 주세요.(최대 1,000자)</label>
+			</div>
+		</div>
+
+		<div>
+			<h2 class="add_info display-6 dot">주소정보</h2>
+			<div class="row g-1 add_info_inner">
+				<div class="col-8 mb-3 col_cus">
+					<input type="text" class="form-control form_custom_v3" id="postcode" placeholder="우편번호">
+				</div>
+				<div class="col-auto col_cus">
+					<input type="button" class="btn btn_gray" onclick="post()" value="우편번호 검색" />
+				</div>
+				<div class="col-100 mb-3 col_cus">
+					<input type="text" id="address" class="form-control form_custom_v3" placeholder="주소" />
+				</div>
+				<div class="col-100 mb-3 col_cus">
+					<input type="text" id="detailAddr" class="form-control form_custom_v3" placeholder="상세주소">
+				</div>
+			</div>
+			<button type="button" class="btn btn_black btn_block weight_800" id="submit" disabled>등록하기</button>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function(){
+			$('.filebox input').on('change', addFiles)
+			$('#submit').on('click', dataSubmit);
+			$('#cafeForm').on('input', check);
+		});
+		// 주소-좌표 변환 객체를 생성합니다.
+		const geocoder = new kakao.maps.services.Geocoder();
+		let initData = {
+			name: null,
+			desc: null,
+			fileList: new Array(),
+			sidoInfo: null,
+			sigunguInfo: null,
+			bname2Info: null,
+			addressInfo: null,
+			jibunAddressInfo: null,
+			zonecodeInfo: null,
+			detailAddrInfo: null,
+			latitude: null,
+			longitude: null
+		}
+		
+		/*유효성 검사*/
+		function check() {
+			const dens = (initData?.fileList && $('#floatingInput')?.val() && $('#textarea')?.val() && $('#textarea')?.val() && $('#postcode')?.val() && $('#address')?.val() && $('#detailAddr')?.val())
+			dens ? $('#submit').attr('disabled', false) : $('#submit').attr('disabled', true);
+		}
+		/* // 유효성 검사*/
+
+		/* 파일 추가 */
+		function addFiles(e) {
+			const files = Array.from($(this)[0].files);
+			files.forEach((item, i) => {
+				const kb = item.size / 1000;
+				const mb = kb / 1000;
+				const fileReader = new FileReader();
+				fileReader.addEventListener('load', function(e){
+					const img = {
+						id: Date.now(),
+						fileName: item.name,
+						fileSize: item.size,
+						url: e.target.result
+					};
+					const {fileList} = initData;
+					if(fileList.length >= 5) {
+						alert('5개 이상은 추가할수 없습니다.')
+						return;
+					} else {
+						initData.fileList.push(img);
+						$(".fileboxText").hide();
+						$("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
+						$('.filebox label').attr('data-number', `${fileList.length}/5`)
+					}
+					if(mb >= 50){
+						alert('용량 50MB 이상은 추가할수 없습니다.')
+						return;
+					}
+					check();
+				})
+				fileReader.readAsDataURL(item);
+			});
+		};
+		/* // 파일 추가 */
+
+		/* 파일 삭제 */
+		function deleteFile(id) {
+			const {fileList} = initData;
+			const handleDeleteArr = fileList.filter((data) => data['id'] !== id);
+			const template = handleDeleteArr.map(function(el, i) {
+				return `<div class="imgFile"><div onclick="deleteFile(${el.id})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
+			}).join('');
+			$('#fileList').html(template);
+			$('.filebox label').attr('data-number', `${handleDeleteArr.length}/5`);
+			initData.fileList = handleDeleteArr
+			if(fileList.length <= 1) {
+				$(".fileboxText").show();
+			}
+			check()
+		};
+		/* // 파일 삭제 */
+		
+		/* 우편번호 서비스 */
+		function post() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+								initData.sidoInfo = data.sido
+								initData.sigunguInfo = data.sigungu
+								initData.bname2Info = data.bname2
+								initData.addressInfo = data.address
+								initData.jibunAddressInfo = data.jibunAddress
+								initData.zonecodeInfo = data.zonecode
+								
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                let addr = ''; // 주소 변수
+                let extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                }
+
+								// 주소로 좌표를 검색합니다.
+								geocoder.addressSearch(data.address, function(result, status) {
+									initData.longitude = result[0].x,
+									initData.latitude = result[0].y
+								})
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("detailAddr").focus();
+            }
+        }).open();
+			}
+		/* // 우편번호 서비스 */
+
+		/* 데이타 전송 */
+		function dataSubmit() {
+			initData.name = $('#floatingInput').val();
+			initData.desc = $("#textarea").val();
+			initData.detailAddrInfo = $("#detailAddr").val();
+			console.log(initData)
+			// $.ajax({ 
+			// 	type: "POST", 
+			// 	url: "/test", 
+			// 	data: { initData }, 
+			// 	success: function(response){ 
+			// 		console.log(response['msg']) 
+			// 	} 
+			// });
+		}
+		/* // 데이타 전송 */
+	</script>
+</body>
+</html>	

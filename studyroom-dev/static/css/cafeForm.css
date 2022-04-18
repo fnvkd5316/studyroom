@@ -1,0 +1,24 @@
+ 
+ .form-floating>.form-control, .form-floating>.form-select {height: calc(3rem + 2px);line-height: 1.35;}
+ /* 파일 업로드 필드 */
+.filebox_waper {display:flex; overflow-x: auto; align-items: center;}
+.filebox label{width:80px;height:100px;line-height:75px;text-align:center;display:inline-block;padding:.5em .75em;color:#C4C4C4;font-size:14px;vertical-align:middle;cursor:pointer;border-radius:.4em;border:1px dashed #C4C4C4;position:relative;}
+.filebox input[type="file"]{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+.filebox label::before{content:attr(data-number);display:block;position:absolute;bottom:0;left:50%;transform:translate(-50%,0);}
+.filebox label i {font-size: 24px;}
+.fileboxText{margin-left: 10px; font-size: 14px;}
+.fileboxText div {color: red;}
+/* 파일 업로드 필드 */
+.fileList {display: flex;}
+.fileList .fileItem {display: inline-block;}
+.imgFile:first-child {margin-left: 5px;}
+.imgFile {width: 80px; margin-right: 5px; position: relative;}
+.imgFile i {position: absolute; top: 4px; right: 4px; font-size: 12px; font-weight: 600; padding: 3px; background-color: #fff; border-radius: 50%; box-shadow: 0 4px 4px rgba(0, 0, 0, .2);}
+.close_inner {position: absolute; top: 30px; right: 20px; font-size: 18px;}
+
+.cafeForm textarea.form-control{height: auto;resize: none;}
+.cafeForm .add_info_inner {justify-content: space-between;}
+.cafeForm .col-8 {width: 64%;}
+.cafeForm .col_cus {margin-top: 0;}
+.cafeForm .btn_block {width: 100%; border-radius: 6px;}
+.cafeForm .display-6 {font-size: 14px; font-weight: 600;}
