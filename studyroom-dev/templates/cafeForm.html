@@ -94,7 +94,7 @@
 		
 		/*유효성 검사*/
 		function check() {
-			const dens = (0 < initData.fileList.length && 0 < $('#floatingInput').val().length && 0 < $('#textarea').val().length && 0 < $('#textarea').val().length && 0 < $('#postcode').val().length && 0 < $('#address').val().length && 0 < $('#detailAddr').val().length)
+			const dens = (initData?.fileList && $('#floatingInput')?.val() && $('#textarea')?.val() && $('#textarea')?.val() && $('#postcode')?.val() && $('#address')?.val() && $('#detailAddr')?.val())
 			dens ? $('#submit').attr('disabled', false) : $('#submit').attr('disabled', true);
 		}
 		/* // 유효성 검사*/
