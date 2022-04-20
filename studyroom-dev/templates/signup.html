@@ -1,10 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" data-dark="false">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=bbdd7d112f7e5b20a2e2bdfefc41e9a0&libraries=services"></script>
+	<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+	<link rel="stylesheet" href="../static/css/common.css">
+	<link rel="stylesheet" href="../static/css/cafeForm.css">
+	<title>회원가입 페이지</title>
 </head>
-<body>
-<!--  회원가입 페이지 입니다.-->
+<body class="cafeForm">
+	<div class="wapper" id="cafeForm">
+		<div class="w-100 btn btn_radius weight_600 mt-4 mb-3">
+			카페 등록
+			<div class="close_inner">
+				<a href="/"><i class="ic-close"></i></a>
+			</div>
+		</div>
+
+		<!-- 파일 업로드 -->
+		<div class="filebox_waper mb-3">
+			<div class="filebox">
+				<label for="file1" data-number="0/5"><i class="ic-add"></i></label>
+				<input type="file" id="file1" name="files" multiple>
+			</div>
+			<div class="fileboxText">사진은 필수로 넣어야 하고, 권장하는 사이즈는 <div>1080 X 1350</div> 용랑은 50MB 이하만 등록 가능합니다.</div>
+			<div id="fileList" class="fileList"></div>
+		</div>
+
+		<!-- 카페 info -->
+		<div>
+			<h2 class="cafeName display-6 dot">카페 이름</h2>
+			<div class="form-floating mb-3">
+				<input type="text" class="form-control form_custom_v2" id="floatingInput" placeholder="카페명을 입력해 주세요.(최대 30자)" maxlength="30">
+				<label for="floatingInput">카페명을 입력해 주세요.(최대 30자)</label>
+			</div>
+		</div>
+
+		<div>
+			<h2 class="cafeDesc display-6 dot">카페 설명</h2>
+			<div class="form-floating mb-3">
+				<textarea id="textarea" class="form-control form_custom_v2" placeholder="카페 설명을 입력해 주세요.(최대 1,000자)" rows="6" maxlength="1000"></textarea>
+				<label for="textarea">카페 설명을 입력해 주세요.(최대 1,000자)</label>
+			</div>
+		</div>
+
+		<div>
+			<h2 class="add_info display-6 dot">주소정보</h2>
+			<div class="row g-1 add_info_inner">
+				<div class="col-8 mb-3 col_cus">
+					<input type="text" class="form-control form_custom_v3" id="postcode" placeholder="우편번호">
+				</div>
+				<div class="col-auto col_cus">
+					<input type="button" class="btn btn_gray" onclick="post()" value="우편번호 검색" />
+				</div>
+				<div class="col-100 mb-3 col_cus">
+					<input type="text" id="address" class="form-control form_custom_v3" placeholder="주소" />
+				</div>
+				<div class="col-100 mb-3 col_cus">
+					<input type="text" id="detailAddr" class="form-control form_custom_v3" placeholder="상세주소">
+				</div>
+			</div>
+			<button type="button" class="btn btn_black btn_block weight_800" id="submit" disabled>등록하기</button>
+		</div>
+	</div>
 </body>
 </html>
