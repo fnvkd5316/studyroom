@@ -100,38 +100,42 @@
 		/* // 유효성 검사*/
 
 		/* 파일 추가 */
-		function addFiles(e) {
-			const files = Array.from($(this)[0].files);
-			files.forEach((item, i) => {
-				const kb = item.size / 1000;
-				const mb = kb / 1000;
-				const fileReader = new FileReader();
-				fileReader.addEventListener('load', function(e){
-					const img = {
-						id: Date.now(),
-						fileName: item.name,
-						fileSize: item.size,
-						url: e.target.result
-					};
-					const {fileList} = initData;
-					if(fileList.length >= 5) {
-						alert('5개 이상은 추가할수 없습니다.')
-						return;
-					} else {
-						initData.fileList.push(img);
-						$(".fileboxText").hide();
-						$("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
-						$('.filebox label').attr('data-number', `${fileList.length}/5`)
-					}
-					if(mb >= 50){
-						alert('용량 50MB 이상은 추가할수 없습니다.')
-						return;
-					}
-					check();
-				})
-				fileReader.readAsDataURL(item);
-			});
-		};
+        function addFiles(e) {
+            const files = Array.from($(this)[0].files);
+            files.forEach((item, i) => {
+                const kb = item.size / 1000;
+                const mb = kb / 1000;
+                if (/\.(jpe?g|png|gif)$/i.test(item.name)) {
+                    const fileReader = new FileReader();
+                    fileReader.addEventListener('load', function (e) {
+                        const img = {
+                            id: Date.now(),
+                            fileName: item.name,
+                            fileSize: item.size,
+                            url: e.target.result
+                        };
+                        const {fileList} = initData;
+                        if (fileList.length >= 5) {
+                            alert('5개 이상은 추가할수 없습니다.')
+                            return;
+                        } else {
+                            initData.fileList.push(img);
+                            $(".fileboxText").hide();
+                            $("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
+                            $('.filebox label').attr('data-number', `${fileList.length}/5`)
+                        }
+                        if (mb >= 50) {
+                            alert('용량 50MB 이상은 추가할수 없습니다.')
+                            return;
+                        }
+                        check();
+                    })
+                    fileReader.readAsDataURL(item);
+                } else {
+                    alert('이미지 확장자 규칙에 주의하세요!')
+                }
+            });
+        };
 		/* // 파일 추가 */
 
 		/* 파일 삭제 */
