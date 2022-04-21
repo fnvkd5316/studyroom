@@ -23,7 +23,7 @@ def saveCafeData():
     name = request.form['name'] #카페 이름
     desc = request.form['desc'] #카페 설명
 
-# 여기부터 주소
+# 주소
     addressInfo      = request.form['addressInfo']      # 도로명주소
     jibunAddressInfo = request.form['jibunAddressInfo'] # 지번주소
     sidoInfo         = request.form['sidoInfo']         # 서울 **시 안붙임**
@@ -32,22 +32,22 @@ def saveCafeData():
     detailAddrInfo   = request.form['detailAddrInfo']   # User가 적어준 상세주소
     zonecodeInfo     = request.form['zonecodeInfo']     # 우편번호
 
-# 주소 경도,위도
+# 주소의 경도,위도
+    longitude = request.form['longitude']  # 경도
     latitude  = request.form['latitude']  # 위도
-    longitude = request.form['longitude'] # 경도
 
     doc = {
-                "name": name,
-                "desc": desc,
-                "addressInfo": addressInfo,
-                "jibunAddressInfo": jibunAddressInfo,
-                "sidoInfo": sidoInfo,
-                "sigunguInfo": sigunguInfo,
-                "bname2Info": bname2Info,
-                "detailAddrInfo": detailAddrInfo,
-                "latitude": latitude,
-                "longitude": longitude,
-                "zonecodeInfo": zonecodeInfo
+            "name": name,
+            "desc": desc,
+            "addressInfo": addressInfo,
+            "jibunAddressInfo": jibunAddressInfo,
+            "sidoInfo": sidoInfo,
+            "sigunguInfo": sigunguInfo,
+            "bname2Info": bname2Info,
+            "detailAddrInfo": detailAddrInfo,
+            "zonecodeInfo": zonecodeInfo,
+            "longitude": longitude,
+            "latitude": latitude
     }
 
     db.cafe_test.insert_one(doc)
@@ -56,49 +56,63 @@ def saveCafeData():
 
 @app.route("/main", methods=["GET"])
 def main_get():
-    list = [
-            {
-                "id": 1,
-                "title": "커피바인더리",
-                "imgUrl": "../static/images/download.jpg",
-                "region": "서울 강남구",
-                "createdAt": 1591714800000,
-                "updatedAt": 1591714800000
-            },
-            {
-                "id": 2,
-                "title": "커피바인더리",
-                "imgUrl": "../static/images/download-1.jpg",
-                "region": "서울 강남구",
-                "createdAt": 1592406000000,
-                "updatedAt": 1592406000000
-            },
-            {
-                "id": 3,
-                "title": "커피바인더리",
-                "imgUrl": "../static/images/download-2.jpg",
-                "region": "서울 강남구",
-                "createdAt": 1591196400000,
-                "updatedAt": 1591196400000
-            },
-            {
-                "id": 4,
-                "title": "커피바인더리",
-                "imgUrl": "../static/images/download-3.jpg",
-                "region": "서울 강남구",
-                "createdAt": 1594738800000,
-                "updatedAt": 1594738800000
-            },
-            {
-                "id": 5,
-                "title": "커피바인더리",
-                "imgUrl": "../static/images/download-4.jpg",
-                "region": "서울 강남구",
-                "createdAt": 1592924400000,
-                "updatedAt": 1592924400000
-            }
-            ]
-    return jsonify({'datas': list})
+    cafes = list(db.cafe_test.find({}, {'_id':False}))
+    cafeList = []
+
+    for cafe in cafes:
+        region = cafe['sidoInfo'] + ' ' + cafe['sigunguInfo']
+
+        doc = {
+                'name': cafe['name'],
+                'region': region,
+                'imgUrl': ''
+        }
+
+        cafeList.append(doc)
+
+    # list = [
+    #         {
+    #             "id": 1,
+    #             "title": "커피바인더리",
+    #             "imgUrl": "../static/images/download.jpg",
+    #             "region": "서울 강남구",
+    #             "createdAt": 1591714800000,
+    #             "updatedAt": 1591714800000
+    #         },
+    #         {
+    #             "id": 2,
+    #             "title": "커피바인더리",
+    #             "imgUrl": "../static/images/download-1.jpg",
+    #             "region": "서울 강남구",
+    #             "createdAt": 1592406000000,
+    #             "updatedAt": 1592406000000
+    #         },
+    #         {
+    #             "id": 3,
+    #             "title": "커피바인더리",
+    #             "imgUrl": "../static/images/download-2.jpg",
+    #             "region": "서울 강남구",
+    #             "createdAt": 1591196400000,
+    #             "updatedAt": 1591196400000
+    #         },
+    #         {
+    #             "id": 4,
+    #             "title": "커피바인더리",
+    #             "imgUrl": "../static/images/download-3.jpg",
+    #             "region": "서울 강남구",
+    #             "createdAt": 1594738800000,
+    #             "updatedAt": 1594738800000
+    #         },
+    #         {
+    #             "id": 5,
+    #             "title": "커피바인더리",
+    #             "imgUrl": "../static/images/download-4.jpg",
+    #             "region": "서울 강남구",
+    #             "createdAt": 1592924400000,
+    #             "updatedAt": 1592924400000
+    #         }
+    #         ]
+    return jsonify({'datas': cafeList})
 
 @app.route("/map", methods=["GET"])
 def map_get():
