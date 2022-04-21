@@ -1,4 +1,8 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, request, jsonify
+
+from pymongo import MongoClient
+client = MongoClient('mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+db = client.dbsparta
 
 app = Flask(__name__)
 
@@ -9,6 +13,46 @@ def home():
 @app.route("/cafeform")
 def cafeForm():
     return render_template("cafeForm.html")
+
+@app.route("/cafeform", methods=["POST"])
+def saveCafeData():
+# 카페 이미지
+# 카페 이미지 저장 구현은 메인화면에 띄우는것 까지하고!
+
+# 카페 정보
+    name = request.form['name'] #카페 이름
+    desc = request.form['desc'] #카페 설명
+
+# 여기부터 주소
+    addressInfo      = request.form['addressInfo']      # 도로명주소
+    jibunAddressInfo = request.form['jibunAddressInfo'] # 지번주소
+    sidoInfo         = request.form['sidoInfo']         # 서울 **시 안붙임**
+    sigunguInfo      = request.form['sigunguInfo']      # 금천구
+    bname2Info       = request.form['bname2Info']       # 가산동
+    detailAddrInfo   = request.form['detailAddrInfo']   # User가 적어준 상세주소
+    zonecodeInfo     = request.form['zonecodeInfo']     # 우편번호
+
+# 주소 경도,위도
+    latitude  = request.form['latitude']  # 위도
+    longitude = request.form['longitude'] # 경도
+
+    doc = {
+                "name": name,
+                "desc": desc,
+                "addressInfo": addressInfo,
+                "jibunAddressInfo": jibunAddressInfo,
+                "sidoInfo": sidoInfo,
+                "sigunguInfo": sigunguInfo,
+                "bname2Info": bname2Info,
+                "detailAddrInfo": detailAddrInfo,
+                "latitude": latitude,
+                "longitude": longitude,
+                "zonecodeInfo": zonecodeInfo
+    }
+
+    db.cafe_test.insert_one(doc)
+
+    return jsonify({'msg': '등록 완료!'})
 
 @app.route("/main", methods=["GET"])
 def main_get():
