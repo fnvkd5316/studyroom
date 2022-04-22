@@ -217,12 +217,15 @@
 			initData.name = $('#floatingInput').val();
 			initData.desc = $("#textarea").val();
 			initData.detailAddrInfo = $("#detailAddr").val();
+
 			console.log(initData)
             //이미지 저장은 테스트 이후!
 			$.ajax({
 				type: "POST",
 				url: "/cafeform",
-				data: { name: initData.name,
+				data: {
+                        cafeImages: initData.fileList[0].url,
+                        name: initData.name,
                         desc: initData.desc,
                         addressInfo: initData.addressInfo,
                         jibunAddressInfo: initData.jibunAddressInfo,

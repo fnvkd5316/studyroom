@@ -1,8 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 
+import json
+
+import certifi #pymongo 접속오류관련
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+mongo_connect = 'mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+client = MongoClient(mongo_connect, tlsCAFile=certifi.where())
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 db = client.dbsparta
+
+import gridfs # 이미지 저장용
+fs = gridfs.GridFS(db)
 
 app = Flask(__name__)
 
@@ -16,16 +24,15 @@ def cafeForm():
 
 @app.route("/cafeform", methods=["POST"])
 def saveCafeData():
-
 # 카페 이미지
-# 카페 이미지 저장 구현은 메인화면에 띄우는것 까지하고!
+    image = request.form['cafeImages']
 
 # 카페 정보
     cafeList = list(db.cafe_test.find({}, {'_id': False}))
 
-    id   = len(cafeList) + 1 #카페 번호
-    name = request.form['name'] #카페 이름
-    desc = request.form['desc'] #카페 설명
+    id   = str(len(cafeList) + 1) #카페 번호
+    name = request.form['name']   #카페 이름
+    desc = request.form['desc']   #카페 설명
 
 # 주소
     addressInfo      = request.form['addressInfo']      # 도로명주소
@@ -43,6 +50,7 @@ def saveCafeData():
 # 생성된 날짜정보 넣기.
 
     doc = {
+            "file": image,
             "id":   id,
             "name": name,
             "desc": desc,
@@ -71,9 +79,9 @@ def main_get():
         region = cafe['sidoInfo'] + ' ' + cafe['sigunguInfo']
 
         doc = {
-                'id': id,
-                'name': cafe['name'],
-                'imgUrl': '',
+                'id':     id,
+                'name':   cafe['name'],
+                'imgUrl': cafe['file'],
                 'region': region
         }
 
