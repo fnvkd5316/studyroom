@@ -27,8 +27,9 @@ def saveCafeData():
 # 카페 이미지
     image = request.form['cafeImages']
 
+
 # 카페 정보
-    id   = make_id()              #카페 번호
+    id   = make_id()              #카페 번호 (숫자)
     name = request.form['name']   #카페 이름
     desc = request.form['desc']   #카페 설명
 
@@ -80,7 +81,7 @@ def make_id():
          t.strftime("%M") +\
          t.strftime("%S")
 
-    return id
+    return int(id) #정수로 변환
 
 @app.route("/main", methods=["GET"])
 def main_get():
