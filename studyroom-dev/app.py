@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, jsonify
 
-import json
-
 import certifi #pymongo 접속오류관련
 from pymongo import MongoClient
 mongo_connect = 'mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'

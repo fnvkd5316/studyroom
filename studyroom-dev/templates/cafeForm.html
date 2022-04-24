@@ -224,18 +224,18 @@
 				type: "POST",
 				url: "/cafeform",
 				data: {
-                        cafeImages: initData.fileList[0].url,
-                        name: initData.name,
-                        desc: initData.desc,
-                        addressInfo: initData.addressInfo,
-                        jibunAddressInfo: initData.jibunAddressInfo,
-                        sidoInfo: initData.sidoInfo,
-                        sigunguInfo: initData.sigunguInfo,
-                        bname2Info: initData.bname2Info,
-                        detailAddrInfo: initData.detailAddrInfo,
-                        zonecodeInfo: initData.zonecodeInfo,
-                        longitude: initData.longitude,
-                        latitude: initData.latitude
+								cafeImages: initData.fileList[0].url,
+								name: initData.name,
+								desc: initData.desc,
+								addressInfo: initData.addressInfo,
+								jibunAddressInfo: initData.jibunAddressInfo,
+								sidoInfo: initData.sidoInfo,
+								sigunguInfo: initData.sigunguInfo,
+								bname2Info: initData.bname2Info,
+								detailAddrInfo: initData.detailAddrInfo,
+								zonecodeInfo: initData.zonecodeInfo,
+								longitude: initData.longitude,
+								latitude: initData.latitude
                 },
 				success: function(response){
 					alert(response['msg'])
