@@ -99,54 +99,59 @@
 		}
 		/* // 유효성 검사*/
 
+		/* 이미지 경로 url로 만들어서 배열로 리턴 */
+		function createObjectURL(objects) {
+			return objects.reduce((acc, cur) => {
+				return (window.URL) ? acc.concat(window.URL.createObjectURL(cur)) : acc.concat(window.webkitURL.createObjectURL(cur));
+			},[]);
+		};
+		/* // 이미지 경로 url로 만들어서 배열로 리턴 */
+
 		/* 파일 추가 */
 		function addFiles(e) {
 			const files = Array.from($(this)[0].files);
 			files.forEach((item, i) => {
 				const kb = item.size / 1000;
 				const mb = kb / 1000;
-                if (/\.(jpe?g|png|gif)$/i.test(item.name)) {
-                    const fileReader = new FileReader();
-                    fileReader.addEventListener('load', function (e) {
-                        const img = {
-                            id: Date.now(),
-                            fileName: item.name,
-                            fileSize: item.size,
-                            url: e.target.result
-                        };
-                        const {fileList} = initData;
-                        if (fileList.length >= 5) {
-                            alert('5개 이상은 추가할수 없습니다.')
-                            return;
-                        } else {
-                            initData.fileList.push(img);
-                            $(".fileboxText").hide();
-                            $("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
-                            $('.filebox label').attr('data-number', `${fileList.length}/5`)
-                        }
-                        if (mb >= 50) {
-                            alert('용량 50MB 이상은 추가할수 없습니다.')
-                            return;
-                        }
-                        check();
-                    })
-                    fileReader.readAsDataURL(item);
-                } else {
-                    alert('이미지 확장자 규칙에 주의하세요!')
-                }
+				if (/\.(jpe?g|png|gif)$/i.test(item.name)) {
+					const img = {
+							id: Date.now(),
+							fileName: item.name,
+							fileSize: item.size,
+							url: createObjectURL(files)[i]
+					};
+					const {fileList} = initData;
+					if (fileList.length >= 5) {
+							alert('5개 이상은 추가할수 없습니다.')
+							return;
+					} else {
+							initData.fileList.push(img);
+							$(".fileboxText").hide();
+							$("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id}, ${i})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
+							$('.filebox label').attr('data-number', `${fileList.length}/5`)
+					}
+					if (mb >= 50) {
+							alert('용량 50MB 이상은 추가할수 없습니다.')
+							return;
+					}
+					check();
+				} else {
+						alert('이미지 확장자 규칙에 주의하세요!')
+				}
 			});
 		};
 		/* // 파일 추가 */
 
 		/* 파일 삭제 */
-		function deleteFile(id) {
+		function deleteFile(id, idx) {
 			const {fileList} = initData;
 			const handleDeleteArr = fileList.filter((data) => data['id'] !== id);
 			const template = handleDeleteArr.map(function(el, i) {
-				return `<div class="imgFile"><div onclick="deleteFile(${el.id})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
+				return `<div class="imgFile"><div onclick="deleteFile(${el.id}, ${i})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
 			}).join('');
 			$('#fileList').html(template);
 			$('#file1').val('');
+			URL.revokeObjectURL(fileList[idx].url)
 			$('.filebox label').attr('data-number', `${handleDeleteArr.length}/5`);
 			initData.fileList = handleDeleteArr
 			if(fileList.length <= 1) {
@@ -239,6 +244,7 @@
                 },
 				success: function(response){
 					alert(response['msg'])
+					window.location.href = '/'
 				}
 			});
 		}
