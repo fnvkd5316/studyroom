@@ -4,16 +4,18 @@ import certifi #pymongo 접속오류관련
 from pymongo import MongoClient
 mongo_connect = 'mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 client = MongoClient(mongo_connect, tlsCAFile=certifi.where())
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
 db = client.dbsparta
 
 import gridfs # 이미지 저장용
 fs = gridfs.GridFS(db)
 
+from datetime import datetime #시간함수
+
 app = Flask(__name__)
 
 @app.route("/")
 def home():
+    print(make_id())
     return render_template("index.html")
 
 @app.route("/cafeform")
@@ -25,10 +27,9 @@ def saveCafeData():
 # 카페 이미지
     image = request.form['cafeImages']
 
-# 카페 정보
-    cafeList = list(db.cafe_test.find({}, {'_id': False}))
 
-    id   = str(len(cafeList) + 1) #카페 번호
+# 카페 정보
+    id   = make_id()              #카페 번호 (숫자)
     name = request.form['name']   #카페 이름
     desc = request.form['desc']   #카페 설명
 
@@ -46,7 +47,6 @@ def saveCafeData():
     longitude = request.form['longitude'] # 경도
 
 # 생성된 날짜정보 넣기.
-
     doc = {
             "file": image,
             "id":   id,
@@ -67,6 +67,22 @@ def saveCafeData():
 
     return jsonify({'msg': '등록 완료!'})
 
+def make_id():
+    # 현재시간을 기준으로 id를 생성하는 함수
+
+    t = datetime.now() #현재시간
+
+    #년, 월, 일, 시, 분, 초, 밀리초(앞2자리) 순서대로
+    id = str(t.year)[2:4] +\
+         t.strftime("%m") +\
+         t.strftime("%d") +\
+         t.strftime("%H") +\
+         t.strftime("%M") +\
+         t.strftime("%M") +\
+         t.strftime("%S")
+
+    return int(id) #정수로 변환
+
 @app.route("/main", methods=["GET"])
 def main_get():
     cafes = list(db.cafe_test.find({}, {'_id': False}))
@@ -85,16 +101,6 @@ def main_get():
 
         cafeList.append(doc)
 
-    # list = [
-    #         {
-    #             "id": 1,
-    #             "name": "커피바인더리",
-    #             "imgUrl": "../static/images/download.jpg",
-    #             "region": "서울 강남구",
-    #             "createdAt": 1591714800000,
-    #             "updatedAt": 1591714800000
-    #         },
-
     return jsonify({'datas': cafeList})
 
 @app.route("/map", methods=["GET"])
@@ -106,18 +112,11 @@ def map_get():
         doc = {
                 "id": cafe['id'],
                 "name": cafe['name'],
-                "positions": [cafe['latitude'], cafe['longitude']]
+                "positions": [cafe['latitude'], cafe['longitude']] #위도 경도
         }
 
         cafeList.append(doc)
 
-    # list = [
-    #         {
-    #             "id": "1",
-    #             "name": "스튜디오 르페리",
-    #             "positions": [37.559643, 127.0811217]
-    #         }
-    #         ]
     return jsonify({'datas': cafeList})
 
 @app.route("/login")
@@ -141,3 +140,4 @@ def signup_form():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+
