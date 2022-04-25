@@ -12,10 +12,10 @@ db = client.dbsparta
 
 from datetime import datetime #시간함수
 
-UPLOAD_FOLDER = 'C:/Users/hihi2/Desktop/sparta/projects/git/studyroom/studyroom-dev/static/images'
+UPLOAD_FOLDER = '/home/ubuntu/studyroom/static/images'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 
-IMAGE_PATH = 'http://localhost:5000/static/images/' #사진 저장된 경로
+IMAGE_PATH = 'http://kimguen.com/static/images/' #사진 저장된 경로
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -108,17 +108,15 @@ def make_id():
 @app.route("/main", methods=["GET"])
 def main_get():
     cafes = list(db.cafe_test.find({}, {'_id': False}))
-    cafeList = []
 
+    cafeList = []
     for cafe in cafes:
-        id = cafe['id']
+        imgUrl = IMAGE_PATH + str(cafe['id']) + '_1.jpg'
         region = cafe['sidoInfo'] + ' ' + cafe['sigunguInfo']
 
-        imgUrl = IMAGE_PATH + str(id) + '_1.jpg'
-
         doc = {
-                'id':     id,
-                'name':   cafe['name'],
+                'id': cafe['id'],
+                'name': cafe['name'],
                 'imgUrl': imgUrl,
                 'region': region
         }
