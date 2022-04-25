@@ -1,3 +1,7 @@
+import os
+# import urllib.request
+from werkzeug.utils import secure_filename
+
 from flask import Flask, render_template, request, jsonify
 
 import certifi #pymongo 접속오류관련
@@ -6,16 +10,19 @@ mongo_connect = 'mongodb+srv://test:sparta@cluster0.rhzwl.mongodb.net/myFirstDat
 client = MongoClient(mongo_connect, tlsCAFile=certifi.where())
 db = client.dbsparta
 
-import gridfs # 이미지 저장용
-fs = gridfs.GridFS(db)
-
 from datetime import datetime #시간함수
 
+UPLOAD_FOLDER = 'C:/Users/hihi2/Desktop/sparta/projects/git/studyroom/studyroom-dev/static/images'
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
+
+IMAGE_PATH = 'http://localhost:5000/static/images/' #사진 저장된 경로
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024
 
 @app.route("/")
 def home():
-    print(make_id())
     return render_template("index.html")
 
 @app.route("/cafeform")
@@ -24,12 +31,28 @@ def cafeForm():
 
 @app.route("/cafeform", methods=["POST"])
 def saveCafeData():
-# 카페 이미지
-    image = request.form['cafeImages']
+# 카페 아이디
+    id = make_id()  # 카페 번호 (숫자)
 
+# 카페 이미지
+    images = request.files.getlist('files')
+
+    i = 1
+    for image in images:
+        imagename = str(id) + "_" + str(i) + '.jpg'
+        imagename = secure_filename(imagename) # 이름 검사
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename)) # 저장
+        i += 1
+
+        # extension = image.filename.rsplit('.', 1)[1].lower() # 확장자 추출
+        # for compare_extension in ALLOWED_EXTENSIONS:
+        #     if ( compare_extension == extension): # 허용되는 확장자 검사
+        #         imagename = str(id) + "_" + str(i) + extension
+        #         imagename = secure_filename(imagename) # 이름 검사
+        #         image.save(os.path.join(app.config['UPLOAD_FOLDER'], imagename)) # 저장
+        #         i += 1
 
 # 카페 정보
-    id   = make_id()              #카페 번호 (숫자)
     name = request.form['name']   #카페 이름
     desc = request.form['desc']   #카페 설명
 
@@ -48,7 +71,6 @@ def saveCafeData():
 
 # 생성된 날짜정보 넣기.
     doc = {
-            "file": image,
             "id":   id,
             "name": name,
             "desc": desc,
@@ -67,10 +89,10 @@ def saveCafeData():
 
     return jsonify({'msg': '등록 완료!'})
 
-def make_id():
-    # 현재시간을 기준으로 id를 생성하는 함수
 
-    t = datetime.now() #현재시간
+# 현재시간을 기준으로 id를 생성하는 함수입니다.
+def make_id():
+    t = datetime.now()
 
     #년, 월, 일, 시, 분, 초, 밀리초(앞2자리) 순서대로
     id = str(t.year)[2:4] +\
@@ -92,10 +114,12 @@ def main_get():
         id = cafe['id']
         region = cafe['sidoInfo'] + ' ' + cafe['sigunguInfo']
 
+        imgUrl = IMAGE_PATH + str(id) + '_1.jpg'
+
         doc = {
                 'id':     id,
                 'name':   cafe['name'],
-                'imgUrl': cafe['file'],
+                'imgUrl': imgUrl,
                 'region': region
         }
 

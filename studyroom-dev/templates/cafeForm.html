@@ -218,28 +218,38 @@
 			initData.desc = $("#textarea").val();
 			initData.detailAddrInfo = $("#detailAddr").val();
 
-			console.log(initData)
+            let form_data = new FormData()
+            let count = document.getElementById('file1').files.length
+
+            for (let i = 0; i < count; i++) {
+                form_data.append("files", document.getElementById('file1').files[i])
+            }
+
+            form_data.append("name", initData.name)
+            form_data.append("desc", initData.desc)
+            form_data.append("addressInfo", initData.addressInfo)
+            form_data.append("jibunAddressInfo", initData.jibunAddressInfo)
+            form_data.append("sidoInfo", initData.sidoInfo)
+            form_data.append("sigunguInfo", initData.sigunguInfo)
+            form_data.append("bname2Info", initData.bname2Info)
+            form_data.append("detailAddrInfo", initData.detailAddrInfo)
+            form_data.append("zonecodeInfo", initData.zonecodeInfo)
+            form_data.append("longitude", initData.longitude)
+            form_data.append("latitude", initData.latitude)
+
+			console.log(form_data)
             //이미지 저장은 테스트 이후!
 			$.ajax({
 				type: "POST",
 				url: "/cafeform",
-				data: {
-                        cafeImages: initData.fileList[0].url,
-                        name: initData.name,
-                        desc: initData.desc,
-                        addressInfo: initData.addressInfo,
-                        jibunAddressInfo: initData.jibunAddressInfo,
-                        sidoInfo: initData.sidoInfo,
-                        sigunguInfo: initData.sigunguInfo,
-                        bname2Info: initData.bname2Info,
-                        detailAddrInfo: initData.detailAddrInfo,
-                        zonecodeInfo: initData.zonecodeInfo,
-                        longitude: initData.longitude,
-                        latitude: initData.latitude
-                },
+				data: form_data,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
 				success: function(response){
 					alert(response['msg'])
-                    window.location.href = '/'
+                    {#window.location.href = '/'#}
 				}
 			});
 		}
