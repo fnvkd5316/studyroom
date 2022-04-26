@@ -143,14 +143,15 @@
 		/* // 파일 추가 */
 
 		/* 파일 삭제 */
-		function deleteFile(id) {
+		function deleteFile(id, idx) {
 			const {fileList} = initData;
 			const handleDeleteArr = fileList.filter((data) => data['id'] !== id);
 			const template = handleDeleteArr.map(function(el, i) {
-				return `<div class="imgFile"><div onclick="deleteFile(${el.id})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
+				return `<div class="imgFile"><div onclick="deleteFile(${el.id}, ${i})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
 			}).join('');
 			$('#fileList').html(template);
 			$('#file1').val('');
+			URL.revokeObjectURL(fileList[idx].url)
 			$('.filebox label').attr('data-number', `${handleDeleteArr.length}/5`);
 			initData.fileList = handleDeleteArr
 			if(fileList.length <= 1) {
