@@ -92,11 +92,13 @@
 			longitude: null
 		}
 
+		/*이미지 미리보기 공통 함수*/
 		function tempHtml(datas){
 			return datas.map(function(el, i) {
 				return `<div class="imgFile"><div onclick="deleteFile(${el.id}, ${i})"><i class="ic-close"></i></div> <img src="${el.url}"></div>`
 			}).join('');
 		};
+		/*이미지 미리보기 공통 함수*/
 		
 		/*유효성 검사*/
 		function check() {
