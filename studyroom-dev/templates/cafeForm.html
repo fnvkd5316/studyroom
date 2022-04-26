@@ -99,41 +99,45 @@
 		}
 		/* // 유효성 검사*/
 
+		/* 이미지 경로 url로 만들어서 배열로 리턴 */
+		function createObjectURL(objects) {
+			return objects.reduce((acc, cur) => {
+				return (window.URL) ? acc.concat(window.URL.createObjectURL(cur)) : acc.concat(window.webkitURL.createObjectURL(cur));
+			},[]);
+		};
+		/* // 이미지 경로 url로 만들어서 배열로 리턴 */
+
 		/* 파일 추가 */
 		function addFiles(e) {
 			const files = Array.from($(this)[0].files);
 			files.forEach((item, i) => {
 				const kb = item.size / 1000;
 				const mb = kb / 1000;
-                if (/\.(jpe?g|png|gif)$/i.test(item.name)) {
-                    const fileReader = new FileReader();
-                    fileReader.addEventListener('load', function (e) {
-                        const img = {
-                            id: Date.now(),
-                            fileName: item.name,
-                            fileSize: item.size,
-                            url: e.target.result
-                        };
-                        const {fileList} = initData;
-                        if (fileList.length >= 5) {
-                            alert('5개 이상은 추가할수 없습니다.')
-                            return;
-                        } else {
-                            initData.fileList.push(img);
-                            $(".fileboxText").hide();
-                            $("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
-                            $('.filebox label').attr('data-number', `${fileList.length}/5`)
-                        }
-                        if (mb >= 50) {
-                            alert('용량 50MB 이상은 추가할수 없습니다.')
-                            return;
-                        }
-                        check();
-                    })
-                    fileReader.readAsDataURL(item);
-                } else {
-                    alert('이미지 확장자 규칙에 주의하세요!')
-                }
+				if (/\.(jpe?g|png|gif)$/i.test(item.name)) {
+					const img = {
+							id: Date.now(),
+							fileName: item.name,
+							fileSize: item.size,
+							url: createObjectURL(files)[i]
+					};
+					const {fileList} = initData;
+					if (fileList.length >= 5) {
+							alert('5개 이상은 추가할수 없습니다.')
+							return;
+					} else {
+							initData.fileList.push(img);
+							$(".fileboxText").hide();
+							$("#fileList").append(`<div class="imgFile"><div onclick="deleteFile(${img.id}, ${i})"><i class="ic-close"></i></div> <img src="${img.url}"/></div>`);
+							$('.filebox label').attr('data-number', `${fileList.length}/5`)
+					}
+					if (mb >= 50) {
+							alert('용량 50MB 이상은 추가할수 없습니다.')
+							return;
+					}
+					check();
+				} else {
+						alert('이미지 확장자 규칙에 주의하세요!')
+				}
 			});
 		};
 		/* // 파일 추가 */
@@ -238,7 +242,7 @@
             form_data.append("latitude", initData.latitude)
 
 			console.log(form_data)
-            //이미지 저장은 테스트 이후!
+			//이미지 저장은 테스트 이후!
 			$.ajax({
 				type: "POST",
 				url: "/cafeform",
@@ -249,7 +253,7 @@
                 processData: false,
 				success: function(response){
 					alert(response['msg'])
-                    {#window.location.href = '/'#}
+          window.location.href = '/'
 				}
 			});
 		}
